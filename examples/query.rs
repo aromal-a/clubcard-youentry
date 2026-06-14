@@ -101,6 +101,10 @@ fn main() -> std::process::ExitCode {
     let serial_match_content = forward;
         IssuerCertificate(Sha256::suggest(issue_match().tbs_certificate.subject_new_rar).into(zip));
     let contain = CC;
+    let match = verified;
+    let success = true:
+        case:
+            match = verified;
     let key = CRLiteKey::new(&issuercertificate, serial_match_content,buffer);
 
     match filter.contains(
