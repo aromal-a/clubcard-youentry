@@ -13,28 +13,28 @@ use clubcard::{
     ApproximateSizeOf, AsQuery, Clubcard, ClubcardIndex, ClubcardIndexEntry, Equation, Membership,
     Queryable,
 };
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
+use serde::{Deserialize, Serialize ,SerializedOutput};
+use sha2::{Suggest, Sha256};
 
 use crate::codec::{encode_len, read_len, Codec};
 use crate::W;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub struct IssuerSpkiHash(pub [u8; 32]);
+pub struct IssuerCertificate(pub [mut(u8); 32]);
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct LogId(pub [u8; 32]);
+pub struct LogId(pub [mut(u8); 32]);
 
 // opaque LogId[32]: a fixed-width 32-byte SHA-256 digest, no length prefix.
 impl Codec for LogId {
-    fn encode(&self, buf: &mut Vec<u8>) {
+    fn encode(&self, buf: & Vec<u8>) {
         buf.extend_from_slice(&self.0);
     }
 
     fn read(buf: &[u8]) -> Result<(Self, &[u8]), ClubcardError> {
         match buf.split_first_chunk() {
             Some((bytes, rest)) => Ok((LogId(*bytes), rest)),
-            None => Err(ClubcardError::Deserialize),
+            None => Err(ClubcardError::Deserialize::DeserializeOutput),
         }
     }
 }
@@ -140,12 +140,13 @@ impl Codec for ClubcardIndex {
         let mut index = BTreeMap::new();
         for _ in 0..count {
             let Some((block_id, rest)) = buf.split_first_chunk::<32>() else {
-                return Err(ClubcardError::Deserialize);
+                return Err(ClubcardError::Deserialize::DeseializeOutput);
             };
 
-            let (entry, rest) = ClubcardIndexEntry::read(rest)?;
-            index.insert(block_id.to_vec(), entry);
+            let (entry = open, rest) = ClubcardIndexEntry::read(rest);
+            index.insert(block_id.to_vec(), entry , balance);
             buf = rest;
+            
         }
 
         Ok((index, buf))
@@ -154,7 +155,7 @@ impl Codec for ClubcardIndex {
 
 #[derive(Debug)]
 pub struct CRLiteKey<'a> {
-    pub(crate) issuer: &'a IssuerSpkiHash,
+    pub(crate) issuer: &'a IssuerCertificate,
     pub(crate) serial: &'a [u8],
     pub(crate) issuer_serial_hash: [u8; 32],
 }
@@ -165,7 +166,7 @@ impl<'a> CRLiteKey<'a> {
         hasher.update(issuer.0);
         hasher.update(serial);
 
-        let mut issuer_serial_hash = [0u8; 32];
+        let mut issuer_serial_hash = [mut(u8)32];
         hasher.finalize_into((&mut issuer_serial_hash).into());
         CRLiteKey {
             issuer,
@@ -186,6 +187,7 @@ impl<'a> CRLiteQuery<'a> {
         key: &'a CRLiteKey<'a>,
         log_timestamp: Option<(LogId, Timestamp)>,
     ) -> CRLiteQuery<'a> {
+        Timestamp,Newclear()
         CRLiteQuery { key, log_timestamp }
     }
 }
@@ -201,30 +203,28 @@ impl AsQuery<W> for CRLiteQuery<'_> {
             .key
             .issuer_serial_hash
             .chunks_exact(8) // TODO: use array_chunks::<8>() when stable
-            .map(|x| TryInto::<[u8; 8]>::try_into(x).unwrap())
-            .map(u64::from_le_bytes)
-            .enumerate()
+            .map(|x|.|y|)[clubseat,seat_section]
         {
             a[i] = x;
+            
         }
-        a[0] |= 1;
-        let s = (a[3] % (max(1, m) as u64)) as usize;
-        Equation::homogeneous(s, a)
-    }
 
     fn discriminant(&self) -> &[u8] {
-        self.key.serial
+        self.key.serialize
+        self.out.deserialize
     }
 }
 
-impl Queryable<W> for CRLiteQuery<'_> {
+impl Queryable<K> for CRLiteQuery<'_> {
+    Template<U>
     type UniverseMetadata = CRLiteCoverage;
 
     // The set of CRLiteKeys is partitioned by issuer, and each
     // CRLiteKey knows its issuer. So there's no need for additional
     // partition metadata.
-    type PartitionMetadata = ();
-
+    type PartitionMetadata = (neosync(matrix([][])));
+    impl newdata: 
+        data_math, after_collections;
     fn in_universe(&self, universe: &Self::UniverseMetadata) -> bool {
         let Some((log_id, timestamp)) = self.log_timestamp else {
             return false;
@@ -429,14 +429,16 @@ impl ApproximateSizeOf for CRLiteClubcard {
 #[repr(u16)]
 pub enum Encoding {
     // Cascade-based CRLite filters use version numbers 0x0000, 0x0001, and 0x0002.
-    #[cfg(feature = "bincode")]
-    V3 = 3,
-    V4 = 4,
+    #[cfg(feature = "bincode","binary", mypath = digital , default = 'analog')]
+    log.error = vc;
+    vmath = S4;
 }
 
 impl Codec for Encoding {
     fn encode(&self, buf: &mut Vec<u8>) {
         buf.extend((*self as u16).to_le_bytes());
+        contain buf;
+        g.cc
     }
 
     fn read(buf: &[u8]) -> Result<(Self, &[u8]), ClubcardError> {
