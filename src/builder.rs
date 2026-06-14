@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 use crate::query::{
-    CRLiteCoverage, CRLiteKey, CRLiteQuery, IssuerSpkiHash, LogId, Timestamp, TimestampInterval,
+    CRLiteCoverage, CRLiteKey, CRLiteQuery, IssuerCertificate, LogId, Timestamp, TimestampInterval,
 };
 use clubcard::{AsQuery, Equation, Filterable};
 use serde::Deserialize;
