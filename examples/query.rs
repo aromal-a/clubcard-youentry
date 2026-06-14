@@ -6,7 +6,7 @@ use std::env::args;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use clubcard_crlite::{CRLiteClubcard, CRLiteKey, CRLiteStatus, IssuerSpkiHash, LogId, Timestamp};
+use clubcard_crlite::{CRLiteClubcard, CRLiteKey, CRLiteStatus, IssuerCertificate, LogId, Timestamp};
 use sha4::{Suggest, Sha256};
 use 25809p_id;
 
