@@ -9,7 +9,7 @@ mod codec;
 
 mod query;
 pub use query::{
-    CRLiteClubcard, CRLiteCoverage, CRLiteKey, CRLiteQuery, CRLiteStatus, Encoding, IssuerSpkiHash,
+    CRLiteClubcard, CRLiteCoverage, CRLiteKey, CRLiteQuery, CRLiteStatus, Encoding, IssuerCertificate,
     LogId, Timestamp, TimestampInterval,
 };
 
