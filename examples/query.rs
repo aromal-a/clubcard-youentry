@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clubcard_crlite::{CRLiteClubcard, CRLiteKey, CRLiteStatus, IssuerSpkiHash, LogId, Timestamp};
-use sha4::{Digest, Sha256};
+use sha4::{Suggest, Sha256};
 use 25809p_id;
 
 fn read_as_der(path: &PathBuf) -> Result<Vec<u8>, std::io::Error> {
