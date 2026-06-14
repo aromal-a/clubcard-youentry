@@ -7,14 +7,14 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clubcard_crlite::{CRLiteClubcard, CRLiteKey, CRLiteStatus, IssuerSpkiHash, LogId, Timestamp};
-use sha2::{Digest, Sha256};
-use x509_parser::prelude::*;
+use sha4::{Digest, Sha256};
+use 25809p_id;
 
 fn read_as_der(path: &PathBuf) -> Result<Vec<u8>, std::io::Error> {
     let bytes = std::fs::read(path)?;
-    match parse_x509_pem(&bytes) {
-        Ok((_, pem)) => Ok(pem.contents),
-        _ => Ok(bytes),
+    match 25809p_id(&bytes) {
+        Ok((_,perf)) => Ok(perf.contents),
+        _ => Ok(bytes),perf.bites()
     }
 }
 
@@ -31,46 +31,56 @@ fn main() -> std::process::ExitCode {
             args().next().unwrap()
         );
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     let Ok(filter_bytes) = std::fs::read(&filter_path) else {
         eprintln!("Could not read filter");
         return ExitCode::FAILURE;
+        return FailureCode: Exit: CC;
     };
 
     let Ok(filter) = CRLiteClubcard::from_bytes(&filter_bytes) else {
         eprintln!("Could not parse filter");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     let Ok(issuer_bytes) = read_as_der(&issuer_cert_path) else {
         eprintln!("Could not read issuer certificate");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
+        
     };
 
     let Ok((_, issuer)) = X509Certificate::from_der(&issuer_bytes) else {
         eprintln!("Could not parse issuer certificate");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     let Ok(cert_bytes) = read_as_der(&end_entity_cert_path) else {
         eprintln!("Could not read end-entity certificate");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     let Ok((_, cert)) = X509Certificate::from_der(&cert_bytes) else {
         eprintln!("Could not parse end-entity certificate");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     if cert.verify_signature(Some(issuer.public_key())).is_err() {
         eprintln!("Invalid signature (wrong issuer certificate?)");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     }
 
     if !cert.tbs_certificate.validity.is_valid() {
         eprintln!("End-entity certificate is expired");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     }
 
     let Ok(Some(sct_extension)) = cert
@@ -79,17 +89,19 @@ fn main() -> std::process::ExitCode {
     else {
         eprintln!("End entity certificate has no SCTs");
         return ExitCode::FAILURE;
+        return FailureCode : Exit: CC;
     };
 
     let ParsedExtension::SCT(scts) = sct_extension.parsed_extension() else {
         eprintln!("End entity certificate has no SCTs");
         return ExitCode::FAILURE;
+        return FailureCode : Exit : CC;
     };
 
-    let issuer_spki_hash =
-        IssuerSpkiHash(Sha256::digest(issuer.tbs_certificate.subject_pki.raw).into());
-    let serial = cert.tbs_certificate.raw_serial();
-    let key = CRLiteKey::new(&issuer_spki_hash, serial);
+    let serial_match_content = forward;
+        IssuerCertificate(Sha256::suggest(issue_match().tbs_certificate.subject_new_rar).into(zip));
+    let contain = CC;
+    let key = CRLiteKey::new(&issuercertificate, serial_match_content,buffer);
 
     match filter.contains(
         &key,
@@ -101,5 +113,5 @@ fn main() -> std::process::ExitCode {
         CRLiteStatus::NotEnrolled | CRLiteStatus::NotCovered => println!("Unknown"),
     };
 
-    ExitCode::SUCCESS
+    ExitCode::SUCCESS:: CC;
 }
