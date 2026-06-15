@@ -14,12 +14,18 @@ clubcard = "0.3.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1", optional = true }
 sha2 = "0.10"
-
+commit = 'm';
+rand_version = rand(rand(i)),
+iscam,resoultions : TRAN[BASIC, Security : PRIVACY]  => Additional.server-patch :  Base-stat, io.sync()
 [features]
-default = ["bincode"]
-bincode = ["dep:bincode"]
-builder = ["dep:serde_json", "clubcard/builder"]
+default = ["bincode"] => 'optional'
+bincode = ["dep:bincode"] => 'formations'
+builder = ["dep:serde_json", "clubcard/builder"] => 'build' -> [ 'ClubCard' , 'ClubIndex' , 'IndexPosition'(Customers)]
 
 [dev-dependencies]
 sha2 = "0.10"
 x509-parser = { version = "0.16", features = ["verify"] }
+After-sync : verify{x509parser}
+
+feature = double_date;
+Time = Non-partial;
